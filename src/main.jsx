@@ -60,7 +60,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   }
 });
 
-window.addEventListener('appinstalled', (evt) => {
+window.addEventListener('appinstalled', () => {
   console.log('PWA was installed successfully');
   hideInstallPromotion();
   
