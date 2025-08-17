@@ -43,7 +43,7 @@ function App() {
       setEncryptedShares(shares)
 
       // Generate QR codes for each share
-      const qrPromises = shares.map((share, index) => 
+      const qrPromises = shares.map((share) => 
         QRCode.toDataURL(share, { 
           width: 300,
           margin: 2,
@@ -146,12 +146,8 @@ function App() {
     
     // Calculate QR code size and positioning
     const qrSize = 60 // mm - larger since we have more space
-    const margin = 20
-    const qrPerRow = 1 // Only one QR code per row
-    const qrSpacing = 20 // Space between QR codes
     
     let currentY = 60
-    let currentRow = 0
     
     for (let i = 0; i < qrCodes.length; i++) {
       // Estimate space needed for this share (QR + text + spacing)
@@ -162,7 +158,6 @@ function App() {
       if (currentY + estimatedHeight > pageHeight - 20) {
         pdf.addPage()
         currentY = 20
-        currentRow = 0
       }
       
       // Center the QR code horizontally
