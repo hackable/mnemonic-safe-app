@@ -5,11 +5,11 @@ const OFFLINE_URL = '/offline.html';
 // Files to cache for offline functionality
 const CACHE_FILES = [
   '/',
-  '/index.html',
-  '/manifest.json',
-  '/icons/icon.svg',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
+  '/mnemonic-safe-app/index.html',
+  '/mnemonic-safe-app/manifest.json',
+  '/mnemonic-safe-app/icons/icon.svg',
+  '/mnemonic-safe-app/icons/icon-192x192.png',
+  '/mnemonic-safe-app/icons/icon-512x512.png',
   // Note: CSS and JS files will be cached dynamically
 ];
 
@@ -175,8 +175,8 @@ self.addEventListener('push', (event) => {
   
   const options = {
     body: event.data ? event.data.text() : 'New notification from Mnemonic Safe',
-    icon: '/icons/icon-192x192.png',
-    badge: '/icons/icon-72x72.png',
+    icon: '/mnemonic-safe-app/icons/icon-192x192.png',
+    badge: '/mnemonic-safe-app/icons/icon-72x72.png',
     vibrate: [200, 100, 200],
     data: {
       dateOfArrival: Date.now(),
@@ -186,12 +186,12 @@ self.addEventListener('push', (event) => {
       {
         action: 'explore',
         title: 'Open App',
-        icon: '/icons/icon-96x96.png'
+        icon: '/mnemonic-safe-app/icons/icon-96x96.png'
       },
       {
         action: 'close',
         title: 'Close',
-        icon: '/icons/icon-96x96.png'
+        icon: '/mnemonic-safe-app/icons/icon-96x96.png'
       }
     ]
   };
@@ -209,7 +209,7 @@ self.addEventListener('notificationclick', (event) => {
   
   if (event.action === 'explore') {
     event.waitUntil(
-      self.clients.openWindow('/')
+      self.clients.openWindow('/mnemonic-safe-app/')
     );
   }
 });
