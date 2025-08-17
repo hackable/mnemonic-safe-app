@@ -2,6 +2,7 @@ import { useState } from 'react'
 import QRCode from 'qrcode'
 import jsPDF from 'jspdf'
 import { bip39ToSlip39, reconstructBip39Mnemonic, decryptShares } from 'mnemonicsafe'
+import HowItWorks from './HowItWorks'
 import './App.css'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
   const [reconstructionPasswords, setReconstructionPasswords] = useState([])
   const [reconstructedMnemonic, setReconstructedMnemonic] = useState('')
   const [error, setError] = useState('')
+  const [currentView, setCurrentView] = useState('main') // 'main' or 'how-it-works'
 
   const generateShares = async () => {
     try {
@@ -145,7 +147,7 @@ function App() {
     pdf.text(`Total Shares: ${qrCodes.length} | Threshold: ${threshold}`, pageWidth / 2, 40, { align: 'center' })
     
     // Calculate QR code size and positioning
-    const qrSize = 60 // mm - larger since we have more spaces
+    const qrSize = 60 // mm - larger since we have more space
     
     let currentY = 60
     
@@ -208,11 +210,40 @@ function App() {
     pdf.save('mnemonic-safe-shares.pdf')
   }
 
+  // Conditional rendering based on current view
+  if (currentView === 'how-it-works') {
+    return <HowItWorks onBack={() => setCurrentView('main')} />
+  }
+
   return (
     <div className="app">
       <header className="app-header">
         <h1>🔐 Mnemonic Safe</h1>
         <p>Secure backup solution for BIP-39 mnemonics using Shamir's Secret Sharing</p>
+        <nav className="app-nav">
+          <button 
+            onClick={() => setCurrentView('how-it-works')}
+            className="nav-button"
+          >
+            🔍 How It Works
+          </button>
+          <a 
+            href="https://github.com/hackable/mnemonic-safe-app" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="nav-link"
+          >
+            📦 GitHub
+          </a>
+          <a 
+            href="https://www.npmjs.com/package/mnemonicsafe" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="nav-link"
+          >
+            📚 NPM Package
+          </a>
+        </nav>
       </header>
 
               <div className="app-container">
