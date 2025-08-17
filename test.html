@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mnemonic Safe Test</title>
+</head>
+<body>
+    <h1>Mnemonic Safe Browser Test</h1>
+    <div id="output"></div>
+    
+    <script type="module">
+        import { bip39ToSlip39, reconstructBip39Mnemonic, decryptShares } from './src/mnemonicSafeBrowser.js';
+        
+        const output = document.getElementById('output');
+        
+        async function test() {
+            try {
+                output.innerHTML = '<p>Testing mnemonic safe functionality...</p>';
+                
+                // Test mnemonic
+                const mnemonic = 'legal winner thank year wave sausage worth useful legal winner thank yellow';
+                const passwords = ['password1', 'password2', 'password3'];
+                
+                output.innerHTML += `<p>Original mnemonic: ${mnemonic}</p>`;
+                
+                // Generate shares
+                const shares = await bip39ToSlip39(mnemonic, 3, 2, passwords);
+                output.innerHTML += `<p>Generated ${shares.length} shares</p>`;
+                
+                // Reconstruct with 2 shares
+                const selectedShares = [shares[0], shares[2]];
+                const selectedPasswords = [passwords[0], passwords[2]];
+                
+                const decryptedShares = await decryptShares(selectedShares, selectedPasswords);
+                const reconstructed = reconstructBip39Mnemonic(decryptedShares);
+                
+                output.innerHTML += `<p>Reconstructed mnemonic: ${reconstructed}</p>`;
+                output.innerHTML += `<p>Success: ${reconstructed === mnemonic ? 'Yes' : 'No'}</p>`;
+                
+            } catch (error) {
+                output.innerHTML += `<p style="color: red;">Error: ${error.message}</p>`;
+                console.error(error);
+            }
+        }
+        
+        test();
+    </script>
+</body>
+</html>
