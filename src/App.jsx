@@ -1,9 +1,86 @@
 import { useState } from 'react'
+import React from 'react'
 import QRCode from 'qrcode'
 import jsPDF from 'jspdf'
 import { bip39ToSlip39, reconstructBip39Mnemonic, decryptShares } from 'mnemonicsafe'
 import HowItWorks from './HowItWorks'
 import './App.css'
+
+// Install Button Component
+function InstallButton() {
+  const [showInstall, setShowInstall] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(false);
+  
+  React.useEffect(() => {
+    // Check if already installed
+    const checkInstalled = () => {
+      return window.matchMedia('(display-mode: standalone)').matches ||
+             window.navigator.standalone ||
+             document.referrer.includes('android-app://');
+    };
+    
+    setIsInstalled(checkInstalled());
+    
+    // Listen for beforeinstallprompt event
+    const handleInstallPrompt = (e) => {
+      e.preventDefault();
+      setShowInstall(true);
+      window.deferredInstallPrompt = e;
+    };
+    
+    const handleAppInstalled = () => {
+      setIsInstalled(true);
+      setShowInstall(false);
+    };
+    
+    window.addEventListener('beforeinstallprompt', handleInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+    
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+  
+  const handleInstall = async () => {
+    if (window.deferredInstallPrompt) {
+      window.deferredInstallPrompt.prompt();
+      const { outcome } = await window.deferredInstallPrompt.userChoice;
+      console.log(`Install prompt outcome: ${outcome}`);
+      window.deferredInstallPrompt = null;
+      setShowInstall(false);
+    }
+  };
+  
+  if (isInstalled) {
+    return (
+      <span className="nav-link installed" style={{ 
+        color: '#48bb78', 
+        cursor: 'default',
+        opacity: 0.8 
+      }}>
+        ✅ Installed
+      </span>
+    );
+  }
+  
+  if (showInstall) {
+    return (
+      <button 
+        onClick={handleInstall}
+        className="nav-button install-button"
+        style={{
+          background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
+          animation: 'pulse 2s infinite'
+        }}
+      >
+        📲 Install App
+      </button>
+    );
+  }
+  
+  return null;
+}
 
 function App() {
   const [mnemonic, setMnemonic] = useState('')
@@ -18,6 +95,20 @@ function App() {
   const [reconstructedMnemonic, setReconstructedMnemonic] = useState('')
   const [error, setError] = useState('')
   const [currentView, setCurrentView] = useState('main') // 'main' or 'how-it-works'
+  
+  // Handle PWA shortcuts and URL parameters
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = urlParams.get('action');
+    
+    if (action === 'generate') {
+      setReconstructionMode(false);
+    } else if (action === 'reconstruct') {
+      setReconstructionMode(true);
+    } else if (action === 'help') {
+      setCurrentView('how-it-works');
+    }
+  }, []);
 
   const generateShares = async () => {
     try {
@@ -227,6 +318,7 @@ function App() {
           >
             🔍 How It Works
           </button>
+          <InstallButton />
           <a 
             href="https://github.com/hackable/mnemonic-safe-app" 
             target="_blank" 

@@ -2,9 +2,58 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🔐 Mnemonic Safe</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Favicons and Icons -->
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="/icons/icon.svg" />
+    <link rel="icon" type="image/svg+xml" sizes="16x16" href="/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon.svg" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#667eea" />
+    <meta name="background-color" content="#667eea" />
+    <meta name="display" content="standalone" />
+    <meta name="orientation" content="portrait-primary" />
+    
+    <!-- iOS Specific PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Mnemonic Safe" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon.svg" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon.svg" />
+    
+    <!-- Android/Chrome Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Mnemonic Safe" />
+    
+    <!-- Microsoft/Windows Meta Tags -->
+    <meta name="msapplication-TileColor" content="#667eea" />
+    <meta name="msapplication-TileImage" content="/icons/icon.svg" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    
+    <!-- SEO and Social Meta Tags -->
+    <meta name="description" content="Secure backup solution for BIP-39 mnemonics using Shamir's Secret Sharing. Create encrypted shares with password protection and QR codes for safe storage." />
+    <meta name="keywords" content="mnemonic, bip39, shamir secret sharing, cryptocurrency, bitcoin, ethereum, wallet backup, security" />
+    <meta name="author" content="Mnemonic Safe" />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Mnemonic Safe - Secure Mnemonic Backup" />
+    <meta property="og:description" content="Secure backup solution for BIP-39 mnemonics using Shamir's Secret Sharing" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/icons/icon.svg" />
+    <meta property="og:url" content="https://hackable.github.io/mnemonic-safe-app/" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mnemonic Safe - Secure Mnemonic Backup" />
+    <meta name="twitter:description" content="Secure backup solution for BIP-39 mnemonics using Shamir's Secret Sharing" />
+    <meta name="twitter:image" content="/icons/icon.svg" />
+    
+    <title>🔐 Mnemonic Safe - Secure Mnemonic Backup</title>
   </head>
   <body>
     <div id="root"></div>

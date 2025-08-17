@@ -11,6 +11,9 @@ A secure React application for backing up and recovering BIP-39 mnemonic phrases
 - **Reconstruction**: Recover your mnemonic phrase from encrypted shares
 - **Modern UI**: Beautiful, responsive interface built with React and Vite
 - **Browser-Native**: All cryptographic operations happen locally in the browser
+- **📱 Progressive Web App (PWA)**: Install on iOS/Android for offline access
+- **🔒 Offline Security**: Works completely offline once installed
+- **📎 App Shortcuts**: Quick access to generate, reconstruct, or learn features
 
 ## Getting Started
 
@@ -38,6 +41,51 @@ A secure React application for backing up and recovering BIP-39 mnemonic phrases
    ```
 
 4. Open your browser and navigate to `http://localhost:5173`
+
+## 📱 Progressive Web App (PWA) Installation
+
+Mnemonic Safe can be installed as a native app on your mobile device or computer for enhanced security and offline access.
+
+### Installing on Mobile (iOS/Android)
+
+**🚀 Automatic Install Prompt**: The app automatically detects mobile devices and shows a guided installation modal 2 seconds after loading (if not dismissed recently).
+
+#### iOS (Safari):
+1. **Automatic**: Wait for the install modal to appear, or
+2. **Manual**: Tap the Share button (□↗) → "Add to Home Screen" → "Add"
+
+#### Android (Chrome):
+1. **Automatic**: Wait for the install modal to appear, or  
+2. **Manual**: Tap the menu (⋮) → "Add to Home screen" → "Install"
+
+#### Smart Features:
+- **📱 Platform Detection**: Shows iOS/Android-specific instructions
+- **⏰ Respectful Timing**: Only shows prompt once every 3 days if dismissed
+- **🎯 One-Click Install**: Direct install button when browser supports it
+- **💾 Remember Choice**: Remembers if you've dismissed the prompt
+
+### Installing on Desktop
+
+#### Chrome/Edge:
+1. Open the app in your browser
+2. Look for the install icon (⊕) in the address bar
+3. Click "Install" when prompted
+
+#### Or use the in-app install button:
+- Look for the animated "📲 Install App" button in the navigation
+- Shows when installation is available
+- Changes to "✅ Installed" when the app is installed
+
+### PWA Benefits
+
+- **🔒 Enhanced Security**: Runs in an isolated app environment
+- **📱 Native Experience**: Looks and feels like a native app
+- **⚡ Offline Access**: Works completely offline once cached
+- **🚀 Quick Launch**: Accessible from home screen/app drawer
+- **🔔 App Shortcuts**: Long-press icon for quick actions:
+  - Generate Shares
+  - Reconstruct Mnemonic  
+  - How It Works guide
 
 ## Usage
 
