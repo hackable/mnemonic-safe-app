@@ -145,7 +145,7 @@ function App() {
     pdf.text(`Total Shares: ${qrCodes.length} | Threshold: ${threshold}`, pageWidth / 2, 40, { align: 'center' })
     
     // Calculate QR code size and positioning
-    const qrSize = 60 // mm - larger since we have more space
+    const qrSize = 60 // mm - larger since we have more spaces
     
     let currentY = 60
     
