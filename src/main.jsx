@@ -97,14 +97,17 @@ function showInstallPromotion() {
       top: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%);
       color: white;
       padding: 15px;
       text-align: center;
       z-index: 1000;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      width: 100%;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     ">
-      <div style="max-width: 600px; margin: 0 auto;">
+      <div style="max-width: 80%; margin: 0 auto;">
         📱 <strong>Install Mnemonic Safe</strong> for offline access and better security!
         <button id="install-button" style="
           background: rgba(255,255,255,0.2);
@@ -115,6 +118,7 @@ function showInstallPromotion() {
           margin-left: 15px;
           cursor: pointer;
           font-weight: 600;
+          transition: all 0.2s ease;
         ">Install App</button>
         <button id="dismiss-install" style="
           background: none;
@@ -123,15 +127,24 @@ function showInstallPromotion() {
           margin-left: 10px;
           cursor: pointer;
           opacity: 0.8;
+          transition: all 0.2s ease;
         ">✕</button>
       </div>
     </div>
   `;
   
+  // Insert banner and add body padding to prevent content overlap
   document.body.appendChild(installBanner);
   
+  // Add top padding to body to compensate for fixed banner
+  const bannerHeight = installBanner.offsetHeight || 70; // Fallback height
+  document.body.style.paddingTop = `${bannerHeight}px`;
+  
   // Add event listeners
-  document.getElementById('install-button').addEventListener('click', async () => {
+  const installBtn = document.getElementById('install-button');
+  const dismissBtn = document.getElementById('dismiss-install');
+  
+  installBtn.addEventListener('click', async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
@@ -141,8 +154,29 @@ function showInstallPromotion() {
     }
   });
   
-  document.getElementById('dismiss-install').addEventListener('click', () => {
+  // Add hover effects
+  installBtn.addEventListener('mouseenter', () => {
+    installBtn.style.background = 'rgba(255,255,255,0.3)';
+    installBtn.style.transform = 'translateY(-1px)';
+  });
+  
+  installBtn.addEventListener('mouseleave', () => {
+    installBtn.style.background = 'rgba(255,255,255,0.2)';
+    installBtn.style.transform = 'translateY(0)';
+  });
+  
+  dismissBtn.addEventListener('click', () => {
     hideInstallPromotion();
+  });
+  
+  dismissBtn.addEventListener('mouseenter', () => {
+    dismissBtn.style.opacity = '1';
+    dismissBtn.style.transform = 'scale(1.1)';
+  });
+  
+  dismissBtn.addEventListener('mouseleave', () => {
+    dismissBtn.style.opacity = '0.8';
+    dismissBtn.style.transform = 'scale(1)';
   });
 }
 
@@ -150,6 +184,8 @@ function hideInstallPromotion() {
   const banner = document.getElementById('install-banner');
   if (banner) {
     banner.remove();
+    // Remove the body padding when banner is hidden
+    document.body.style.paddingTop = '';
   }
 }
 
@@ -213,7 +249,7 @@ function showMobileInstallPromotion() {
         background: white;
         border-radius: 20px;
         padding: 30px;
-        max-width: 350px;
+        max-width: min(80%, 400px);
         width: 100%;
         box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         text-align: center;
@@ -326,6 +362,8 @@ function showInstallSuccessMessage() {
       box-shadow: 0 10px 25px rgba(72, 187, 120, 0.3);
       z-index: 10001;
       animation: slideDown 0.3s ease;
+      max-width: 80%;
+      text-align: center;
     ">
       ✅ App installed successfully! You can now use Mnemonic Safe offline.
     </div>

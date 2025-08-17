@@ -85,6 +85,8 @@ function InstallButton() {
 function App() {
   const [mnemonic, setMnemonic] = useState('')
   const [password, setPassword] = useState('')
+  const [passwordMode, setPasswordMode] = useState('single') // 'single' or 'multiple'
+  const [multiplePasswords, setMultiplePasswords] = useState(['', '', '']) // Array for multiple passwords
   const [totalShares, setTotalShares] = useState(3)
   const [threshold, setThreshold] = useState(2)
   const [encryptedShares, setEncryptedShares] = useState([])
@@ -96,6 +98,21 @@ function App() {
   const [error, setError] = useState('')
   const [currentView, setCurrentView] = useState('main') // 'main' or 'how-it-works'
   
+  // Update multiple passwords array when totalShares changes
+  React.useEffect(() => {
+    setMultiplePasswords(prev => {
+      const newPasswords = [...prev];
+      // Adjust array length to match totalShares
+      while (newPasswords.length < totalShares) {
+        newPasswords.push('');
+      }
+      if (newPasswords.length > totalShares) {
+        newPasswords.splice(totalShares);
+      }
+      return newPasswords;
+    });
+  }, [totalShares]);
+
   // Handle PWA shortcuts and URL parameters
   React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -119,17 +136,29 @@ function App() {
         setError('Please enter a mnemonic phrase')
         return
       }
-      if (!password.trim()) {
-        setError('Please enter a password')
-        return
+      
+      // Validate passwords based on mode
+      if (passwordMode === 'single') {
+        if (!password.trim()) {
+          setError('Please enter a password')
+          return
+        }
+      } else {
+        if (multiplePasswords.some(p => !p.trim())) {
+          setError('Please enter a password for each share')
+          return
+        }
       }
+      
       if (threshold > totalShares) {
         setError('Threshold cannot be greater than total shares')
         return
       }
 
-      // Generate passwords array (using the same password for all shares)
-      const passwords = Array(totalShares).fill(password)
+      // Generate passwords array based on mode
+      const passwords = passwordMode === 'single' 
+        ? Array(totalShares).fill(password)
+        : multiplePasswords.slice(0, totalShares)
       
       // Generate encrypted shares using mnemonicsafe package
       const shares = await bip39ToSlip39(mnemonic, totalShares, threshold, passwords)
@@ -212,6 +241,12 @@ function App() {
     const newPasswords = [...reconstructionPasswords]
     newPasswords[index] = value
     setReconstructionPasswords(newPasswords)
+  }
+
+  const updateMultiplePassword = (index, value) => {
+    const newPasswords = [...multiplePasswords]
+    newPasswords[index] = value
+    setMultiplePasswords(newPasswords)
   }
 
   const downloadQRCode = (qrCode, index) => {
@@ -372,14 +407,62 @@ function App() {
             </div>
 
             <div className="input-group">
-              <label htmlFor="password">Password:</label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter a strong password"
-              />
+              <label>Password Configuration:</label>
+              <div className="password-mode-selector" style={{
+                display: 'flex',
+                gap: '10px',
+                marginBottom: '15px',
+                padding: '10px',
+                background: '#f8f9fa',
+                borderRadius: '8px'
+              }}>
+                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <input
+                    type="radio"
+                    value="single"
+                    checked={passwordMode === 'single'}
+                    onChange={(e) => setPasswordMode(e.target.value)}
+                    style={{ marginRight: '5px' }}
+                  />
+                  Single password for all shares
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <input
+                    type="radio"
+                    value="multiple"
+                    checked={passwordMode === 'multiple'}
+                    onChange={(e) => setPasswordMode(e.target.value)}
+                    style={{ marginRight: '5px' }}
+                  />
+                  Different password for each share
+                </label>
+              </div>
+              
+              {passwordMode === 'single' ? (
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter a strong password for all shares"
+                  style={{ width: '100%' }}
+                />
+              ) : (
+                <div className="multiple-passwords" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {multiplePasswords.slice(0, totalShares).map((pwd, index) => (
+                    <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <label style={{ minWidth: '80px', fontWeight: '600' }}>Share {index + 1}:</label>
+                      <input
+                        type="password"
+                        value={pwd}
+                        onChange={(e) => updateMultiplePassword(index, e.target.value)}
+                        placeholder={`Password for share ${index + 1}`}
+                        style={{ flex: 1 }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="shares-config">
@@ -417,6 +500,8 @@ function App() {
               onClick={() => {
                 setMnemonic('legal winner thank year wave sausage worth useful legal winner thank yellow')
                 setPassword('password123!')
+                setPasswordMode('single')
+                setMultiplePasswords(['pass1!', 'pass2@', 'pass3#', 'pass4$', 'pass5%'])
                 setTotalShares(5)
                 setThreshold(3)
               }}
@@ -445,7 +530,8 @@ function App() {
             }}>
               <p style={{ margin: '0', color: '#1976d2', fontSize: '0.9rem' }}>
                 <strong>💡 Tip:</strong> Click "Load Example Data" to test with a sample 24-word BIP-39 mnemonic. 
-                This will create 5 shares where any 3 can reconstruct the original phrase.
+                This will create 5 shares where any 3 can reconstruct the original phrase. You can switch between 
+                single password mode (same password for all shares) or multiple password mode (unique password per share).
               </p>
             </div>
 
