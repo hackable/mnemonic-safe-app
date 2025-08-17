@@ -408,31 +408,22 @@ function App() {
 
             <div className="input-group">
               <label>Password Configuration:</label>
-              <div className="password-mode-selector" style={{
-                display: 'flex',
-                gap: '10px',
-                marginBottom: '15px',
-                padding: '10px',
-                background: '#f8f9fa',
-                borderRadius: '8px'
-              }}>
-                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+              <div className="password-mode-selector">
+                <label>
                   <input
                     type="radio"
                     value="single"
                     checked={passwordMode === 'single'}
                     onChange={(e) => setPasswordMode(e.target.value)}
-                    style={{ marginRight: '5px' }}
                   />
                   Single password for all shares
                 </label>
-                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                <label>
                   <input
                     type="radio"
                     value="multiple"
                     checked={passwordMode === 'multiple'}
                     onChange={(e) => setPasswordMode(e.target.value)}
-                    style={{ marginRight: '5px' }}
                   />
                   Different password for each share
                 </label>
